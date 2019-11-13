@@ -38,7 +38,7 @@ class OrdersController extends Controller
     {
         // Log::debug('An informational message.', $request);
         $body = $request->all();
-        orders::insert([
+        $order = orders::create([
             "name" => $body['name'],
             "email" => $body['email'],
             "address" => $body['address'],
@@ -46,6 +46,13 @@ class OrdersController extends Controller
             "total" => $body['total'],
             "status" => $body['status'],
         ]);
+            $order_id = $order->id;
+        foreach ($body['items'] as $pizza) {
+            mappings::insert(
+              ['o_id' => $order_id, 'p_id' => $pizza['id'], 'quantity' => $pizza['quantity']]
+            );
+          }
+          
         return response(["status"=> 'ok'], 201);
     }
 
