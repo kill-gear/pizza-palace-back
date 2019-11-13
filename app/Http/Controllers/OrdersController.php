@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\orders;
+use App\mappings;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -35,7 +36,17 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Log::debug('An informational message.', $request);
+        $body = $request->all();
+        orders::insert([
+            "name" => $body['name'],
+            "email" => $body['email'],
+            "address" => $body['address'],
+            "payment_reference" => $body['payment_reference'],
+            "total" => $body['total'],
+            "status" => $body['status'],
+        ]);
+        return response(["status"=> 'ok'], 201);
     }
 
     /**
